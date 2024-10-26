@@ -13,7 +13,7 @@ anthropic_client = anthropic.Anthropic()
 vo = voyageai.Client()
 
 def imgToRecipe(b64Url, media_type):
-    image1_data = b64Url.decode("utf-8")
+    image1_data = b64Url
     recipe_handles = []
 
     def gen_recipe():
@@ -98,8 +98,7 @@ def genTags(recipe_title):
     return message.content[0].text
 
 def imgToIngredientsEmbed(b64Url, media_type):
-    image1_data = b64Url.decode("utf-8")
-
+    image1_data = b64Url
     message = anthropic_client.messages.create(
         model="claude-3-5-sonnet-20241022",
         max_tokens=1024,
@@ -139,7 +138,7 @@ if (__name__ == "__main__"):
 
     image1_url = "https://t4.ftcdn.net/jpg/01/33/97/33/360_F_133973378_UVcL2YBMV6bzaZTEE6rfVeEcIHZpRDIl.jpg"
     image1_media_type = "image/jpeg"
-    image1_data = base64.b64encode(httpx.get(image1_url).content)
+    image1_data = base64.b64encode(httpx.get(image1_url).content).decode('utf-8')
     s = time.time()
     recipe = imgToRecipe(image1_data, image1_media_type)
     e = time.time()

@@ -35,7 +35,7 @@ def create_user(username):
 
     if (res == None):
         return OPERATION_ERROR
-    
+    print("hello")
     return 0
 
 def check_user_exists(username):
@@ -46,16 +46,12 @@ def check_user_exists(username):
     if (userInfo == None):
         return COLLECTION_NOT_FOUND
     
-    res = userInfo.insert_one({
-        "user": username
-    })
-
-    if (res == None):
-        return OPERATION_ERROR
-    
     out = userInfo.find_one({
         "user": username
     })
+
+    if (out == None):
+        return OPERATION_ERROR
 
     if (out == None):
         return False
@@ -91,6 +87,7 @@ def get_user_recipe_info(username):
         "user": username
     })
     for recipe in out:
+        del recipe["_id"]
         recipes.append(recipe)
     return recipes
 
@@ -106,6 +103,8 @@ def update_recipe(recipe_id, favorited):
     embeddingInfo.update_one({ 'uuid': recipe_id }, {
         '$set': {"favorited": favorited}
     })
+
+    return 0
 
 
 
