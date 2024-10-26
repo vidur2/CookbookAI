@@ -36,7 +36,6 @@ def create_user(username):
 
     if (res == None):
         return OPERATION_ERROR
-    print("hello")
     return 0
 
 def check_user_exists(username):
