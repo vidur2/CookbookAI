@@ -1,19 +1,22 @@
 import anthropic
 import dotenv
-import httpx
 import base64
 import voyageai
-from concurrent.futures import ThreadPoolExecutor
+from json import loads
+import time
+import random
+from foodAdjectives import food_adjectives
+
 
 dotenv.load_dotenv()
 anthropic_client = anthropic.Anthropic()
 vo = voyageai.Client()
 
-def imgToRecipeList(b64Url, media_type, count):
+def imgToRecipe(b64Url, media_type):
     image1_data = b64Url.decode("utf-8")
     recipe_handles = []
 
-    def gen_recipe(r):
+    def gen_recipe():
         message = anthropic_client.messages.create(
             model="claude-3-5-sonnet-20241022",
             max_tokens=1024,
@@ -31,21 +34,19 @@ def imgToRecipeList(b64Url, media_type, count):
                         },
                         {
                             "type": "text",
-                            "text": f"Make a recipe for {r} the ingredients that you see in this image. Just say the recipe, no preamble."
+                            "text": f"Make a {food_adjectives[random.randint(0, 100)]} recipe for the ingredients that you see in this image. Just say the recipe, no preamble."
                         }
                     ],
                 }
             ],
+            temperature=1.0
         )
 
-        return message.content[0].text
+        recipeInfo = loads(genTags(message.content[0].text))
+        recipeInfo['recipe'] = message.content[0].text
+        return recipeInfo
 
-    recipe_ideas = imageToRecipeIdeas(image1_data, media_type, count)
-    with ThreadPoolExecutor(max_workers=1) as t:
-        for r in recipe_ideas:
-            recipe_handles.append(t.submit(gen_recipe, r))
-
-    return [r.result() for r in recipe_handles]
+    return gen_recipe()
 
 
 def imageToRecipeIdeas(image1_data, media_type, count):
@@ -71,10 +72,30 @@ def imageToRecipeIdeas(image1_data, media_type, count):
                     }
                 ],
             }
-        ],
+        ]
     )
 
     return message.content[0].text.split(";")
+
+def genTags(recipe_title):
+    message = anthropic_client.messages.create(
+        model="claude-3-5-sonnet-20241022",
+        max_tokens=1024,
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": f"Can you create tags for the recipe {recipe_title} for difficulty_rating (1-5), cuisine (ie thai, indian, american, chinese, etc), is_vegetarian, is_vegan returned as a json string? Return only the json, nothing else"
+                    }
+                ]
+            }
+        ],
+        temperature=0.1
+    )
+
+    return message.content[0].text
 
 def imgToIngredientsEmbed(b64Url, media_type):
     image1_data = b64Url.decode("utf-8")
@@ -108,10 +129,18 @@ def imgToIngredientsEmbed(b64Url, media_type):
 
     return embedding
 
-
+def get_full_info(image1_data, image1_media_type):
+    recipe = imgToRecipe(image1_data, image1_media_type)
+    recipe["embedding"] = imgToIngredientsEmbed(image1_data, image1_media_type)
+    return recipe
 
 if (__name__ == "__main__"):
+    import httpx
+
     image1_url = "https://t4.ftcdn.net/jpg/01/33/97/33/360_F_133973378_UVcL2YBMV6bzaZTEE6rfVeEcIHZpRDIl.jpg"
     image1_media_type = "image/jpeg"
     image1_data = base64.b64encode(httpx.get(image1_url).content)
-    print(imgToRecipeList(image1_data, image1_media_type, 3))
+    s = time.time()
+    recipe = imgToRecipe(image1_data, image1_media_type)
+    e = time.time()
+    print(f"Recipe: {recipe}, time to gen: {e - s}")
