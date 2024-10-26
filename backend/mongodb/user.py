@@ -13,7 +13,7 @@ USER_EXISTS = 4
 USER_NOT_EXISTS = 5
 
 dotenv.load_dotenv()
-uri = f"mongodb+srv://root:{os.getenv('MONGO_DB_ROOT_PW')}@cookbook-ai.4azvz.mongodb.net/?retryWrites=true&w=majority&appName=cookbook-ai"
+uri = f"mongodb+srv://root:{os.getenv('MONGO_DB_ROOT_PW1')}@cookbook-ai.4azvz.mongodb.net/?retryWrites=true&w=majority&appName=cookbook-ai"
 # Create a new client and connect to the server
 client = MongoClient(uri)
 
