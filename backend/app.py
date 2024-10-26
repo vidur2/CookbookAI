@@ -5,8 +5,10 @@ sys.path += ["anthropic/", "mongodb/"]
 from claude_gen import get_full_info
 from user import create_user, create_recipe_info, get_user_recipe_info, update_recipe
 import base64
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def test():
