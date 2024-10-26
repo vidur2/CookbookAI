@@ -92,6 +92,7 @@ def create_recipe():
         return jsonify({"error": "Invalid JSON"}), 400  # Handle invalid JSON
     recipe = get_full_info(request.json["img"], "image/jpeg")
     status = create_recipe_info(data["username"], recipe)
+    del recipe["embedding"]
 
     del recipe["_id"]
 
