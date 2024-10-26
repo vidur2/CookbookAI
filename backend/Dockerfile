@@ -4,6 +4,8 @@ FROM python:3.11-slim
 # Set the working directory
 WORKDIR /app
 
+EXPOSE 5001
+
 # Copy the requirements file into the container
 COPY requirements.txt .
 
