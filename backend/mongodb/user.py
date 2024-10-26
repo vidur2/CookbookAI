@@ -88,6 +88,7 @@ def get_user_recipe_info(username):
     })
     for recipe in out:
         del recipe["_id"]
+        del recipe["embedding"]
         recipes.append(recipe)
     return recipes
 
