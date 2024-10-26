@@ -2,8 +2,8 @@ from flask import Flask, request, jsonify
 import sys
 sys.path += ["anthropic/", "mongodb/"]
 
-from claude_gen import get_full_info
-from user import create_user, create_recipe_info, get_user_recipe_info, update_recipe
+from claude_gen import get_full_info, imgToIngredientsEmbed, gen_based_on_other_recipe
+from user import create_user, create_recipe_info, get_user_recipe_info, update_recipe, filter_vector_search
 import base64
 from flask_cors import CORS
 
@@ -82,7 +82,8 @@ def update_fav():
 """
 {
     "img": <base64-string>
-    "username": <string>
+    "username": <string>,
+    "filters": <array | None>
 }
 """
 @app.route("/recipes/create", methods=['POST'])
@@ -90,10 +91,15 @@ def create_recipe():
     data = request.json
     if data is None:
         return jsonify({"error": "Invalid JSON"}), 400  # Handle invalid JSON
-    recipe = get_full_info(request.json["img"], "image/jpeg")
+    if ('filters' not in data or len(data['filters']) == 0):
+        recipe = get_full_info(request.json["img"], "image/jpeg")
+    else:
+        embedding = imgToIngredientsEmbed(data['img'], "image/jpeg")
+        recipe = gen_based_on_other_recipe(filter_vector_search(embedding, data['filters'], data['username']), data['filters'])
+        recipe['embedding'] = embedding
+    
     status = create_recipe_info(data["username"], recipe)
     del recipe["embedding"]
-
     del recipe["_id"]
 
     if (status != 0):
@@ -109,4 +115,4 @@ def create_recipe():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5002)

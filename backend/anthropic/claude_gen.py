@@ -34,7 +34,7 @@ def imgToRecipe(b64Url, media_type):
                         },
                         {
                             "type": "text",
-                            "text": f"Make a {food_adjectives[random.randint(0, 100)]} recipe for the ingredients that you see in this image. Just say the recipe, no preamble."
+                            "text": f"Make a {food_adjectives[random.randint(0, 99)]} recipe for the ingredients that you see in this image. Just say the recipe, no preamble."
                         }
                     ],
                 }
@@ -47,6 +47,27 @@ def imgToRecipe(b64Url, media_type):
         return recipeInfo
 
     return gen_recipe()
+
+def gen_based_on_other_recipe(recipe_info, filters):
+    message = anthropic_client.messages.create(
+        model="claude-3-5-sonnet-20241022",
+        max_tokens=1024,
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": f"Make a {food_adjectives[random.randint(0, 99)]} based on {recipe_info} that is {' '.join(filters)}. Just say the recipe, no preamble"
+                    }
+                ]
+            }
+        ]
+    )
+
+    recipeInfo = loads(genTags(message.content[0].text))
+    recipeInfo['recipe'] = message.content[0].text
+    return recipeInfo
 
 
 def imageToRecipeIdeas(image1_data, media_type, count):
@@ -87,7 +108,7 @@ def genTags(recipe_title):
                 "content": [
                     {
                         "type": "text",
-                        "text": f"Can you create tags for the recipe {recipe_title} for difficulty_rating (1-5), cuisine (ie thai, indian, american, chinese, etc), is_vegetarian, is_vegan returned as a json string? Return only the json, nothing else"
+                        "text": f"Can you create tags for the recipe {recipe_title} for difficulty_rating (1-5), cuisine (ie thai, indian, american, chinese, etc), is_vegetarian, is_vegan, and recipe_title returned as a json string? Return only the json, nothing else"
                     }
                 ]
             }

@@ -108,6 +108,48 @@ def update_recipe(recipe_id, favorited):
     return 0
 
 
+def buildMatchFilter(filters, username):
+    out = dict()
+    for f in filters:
+        out[f] = { '$eq': True }
+    out['user'] = {'$eq': username}
+    return out
+
+
+def filter_vector_search(embedding, filters, username):
+    db = client['recipes']
+    if (db  == None):
+        return DB_NOT_FOUND
+    embeddingInfo = db['embeddings']
+    if (embeddingInfo == None):
+        return COLLECTION_NOT_FOUND
+    pipeline = [
+        {
+            '$vectorSearch': {
+                'index': 'vector_index', 
+                'path': 'embedding', 
+                'queryVector': embedding,
+                'numCandidates': 150, 
+                'limit': 1
+            }
+        }, 
+        {
+            '$match': buildMatchFilter(filters, username)
+        },
+        {
+            '$project': {
+                '_id': 0, 
+                'recipe': 1,
+                'score': {
+                    '$meta': 'vectorSearchScore'
+                }
+            }
+        }
+    ]
+    out = None
+    for r in embeddingInfo.aggregate(pipeline):
+        out = r
+    return out
 
 
 
