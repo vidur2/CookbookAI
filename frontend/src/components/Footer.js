@@ -1,8 +1,12 @@
 import React from 'react';
 import { Paper, BottomNavigation, BottomNavigationAction, Fab } from '@mui/material';
-import { Add } from '@mui/icons-material';
+import { AccountBox, Add, ImageSearch, MenuBook, Photo } from '@mui/icons-material';
 
-export default function BottomNav({ value, onChange }) {
+export default function BottomNav({ value, onChange, router }) {
+  const scanAction = () =>  router.push("/");
+  const recipeAction = () =>  router.push("/Recipes");
+
+
   return (
     <Paper 
       sx={{ 
@@ -15,15 +19,17 @@ export default function BottomNav({ value, onChange }) {
       elevation={3}
     >
       <BottomNavigation
+        // showLabels
         value={value}
         onChange={onChange}
         sx={{ height: 70 }}
       >
-        <BottomNavigationAction label="Recipes" />
-        <BottomNavigationAction label="Favorites" />
+        <BottomNavigationAction label="Scan" icon={<ImageSearch />} onClick={scanAction}/>
+        <BottomNavigationAction label="Recipes" icon={<MenuBook />} onClick={recipeAction}/>
+        <BottomNavigationAction label="Profile" icon={<AccountBox />} />
       </BottomNavigation>
       
-      <Fab
+      {/* <Fab
         color="primary"
         sx={{
           position: 'absolute',
@@ -34,7 +40,7 @@ export default function BottomNav({ value, onChange }) {
         }}
       >
         <Add />
-      </Fab>
+      </Fab> */}
     </Paper>
   );
 }

@@ -1,20 +1,22 @@
 import {useState} from 'react';
 import { Card, Typography, Chip, Rating, Switch, Stack, IconButton } from '@mui/material';
+import FavoriteButton from './FavoriteButton';
+import Tag from './Tag';
 
-export function RecipeCard({text, rating, favorite}) {
+export default function RecipeCard({text, rating, favorite, tags}) {
 
-  const [active, setActive] = useState(favorite);
-  const handleToggleActive = (event) => {
-    setActive(!active)
-  };
-  
   return (
     <Card
       sx = {{width: '80%', margin: 'auto', borderRadius: 5}}  
     >
       <Stack direction="row" alignItems="center"  justifyContent="space-between" spacing={5} p={2} useFlexGap>
         <Stack direction="column" spacing={0.5} useFlexGap>
+          
+          <Stack direction="row" spacing={1} useFlexGap sx={{alignItems: "center"}}>
           <Typography>{text}</Typography>
+          <Rating value={rating} size="small" readOnly />
+          </Stack>
+
           <Stack direction="row" spacing={1} useFlexGap>
             {/* <Chip
             size="small"
@@ -23,15 +25,18 @@ export function RecipeCard({text, rating, favorite}) {
             /> */}
 
             {/* --- tags --- */}
+            <Stack direction="row" marginTop={1} spacing={1} sx={{ justifyContent: "center", alignItems: "center"}}>
+                {tags.map((tag, index) => (
+                    <Tag key={index} tag={tag} small />
+                ))}
+            </Stack>
             
             {/* <Typography variant="body1">Recipe Difficulty: </Typography> */}
-            <Rating value={rating} size="small" readOnly />
+            {/* <Rating value={rating} size="small" readOnly /> */}
           </Stack>
         </Stack>
         <Stack direction="row" alignItems="center" spacing={0} p={0}>
-          <IconButton onClick={handleToggleActive} >
-            {active ? "❤️" : "🩶"}
-          </IconButton>
+          <FavoriteButton favorite={favorite}/>
 
           {/* <Typography>{active ? "❤️" : "🩶"}</Typography>
           <Switch checked={active} onChange={handleToggleActive} /> */}
