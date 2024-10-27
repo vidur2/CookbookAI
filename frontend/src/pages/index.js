@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import RecipeCard from '@/components/RecipeCard';
 import ImageUpload from '@/components/ImageUpload';
 import TagToggle from '@/components/TagToggle';
+import LoadingScreen from '@/components/LoadingScreen';
 import { useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress'; 
 import { useRouter } from 'next/router';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '@/theme';
 import FavoriteButton from '@/components/FavoriteButton';
 
 export default function RecipeApp() {
@@ -37,9 +40,13 @@ export default function RecipeApp() {
 
   if (loading) {
     return (
-        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-            <CircularProgress />
-        </Box>
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+          {/* <Typography variant="h5" align="center">
+            Login
+          </Typography> */}
+          {/* <CircularProgress size={120} /> */}
+          <LoadingScreen />
+      </Box>
     ); 
   }
 
@@ -59,5 +66,6 @@ export default function RecipeApp() {
       />
 
     </Box>
+
   );
 }

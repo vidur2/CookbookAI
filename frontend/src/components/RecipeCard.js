@@ -4,6 +4,7 @@ import FavoriteButton from './FavoriteButton';
 import Tag from './Tag';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import DiffRating from './DiffRating';
 
 export default function RecipeCard({text, rating, favorite, tags, uuid, description }) {
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function RecipeCard({text, rating, favorite, tags, uuid, descript
           
           <Stack direction="row" spacing={1} useFlexGap sx={{alignItems: "center"}}>
           <Typography>{text}</Typography>
-          <Rating value={rating} size="small" readOnly />
+          <DiffRating value={rating} />
           </Stack>
 
           <Stack direction="row" spacing={1} useFlexGap>

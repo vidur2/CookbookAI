@@ -8,6 +8,7 @@ import RecipeCard from '@/components/RecipeCard';
 import FavoriteButton from '@/components/FavoriteButton';
 import Tag from '@/components/Tag';
 import { useEffect } from 'react';
+import DiffRating from '@/components/DiffRating';
 
 
 function processParams(query, setActive) {
@@ -108,7 +109,8 @@ export default function RecipeInfo() {
                     </Stack>
                     
                     <Stack direction="row" spacing={1} sx={{ justifyContent: "center", alignItems: "center"}}>
-                        <Rating value={rating} readOnly align="center" />
+                        {/* <Rating value={rating} readOnly align="center" /> */}
+                        <DiffRating value={rating} />
                         <FavoriteButton uuid={uuid} active={active} setActive={setActive} />
                     </Stack>
                     <Stack marginBottom={"30%"}>

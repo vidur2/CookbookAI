@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Box, Stack, TextField } from '@mui/material';
+import { Box, Stack, TextField, Typography } from '@mui/material';
 import Footer from '@/components/Footer';
 import { useRouter } from 'next/router';
 import RecipeCard from '@/components/RecipeCard';
@@ -88,7 +88,7 @@ export default function Recipes() {
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-          <CircularProgress />
+           <CircularProgress size={120} />
       </Box>
   ); 
   }
@@ -98,8 +98,19 @@ export default function Recipes() {
 
       <Header text="Saved Recipes" />
 
-      <TextField label={"Search"} onChange={handleSearchChange} ></TextField>
-      <TagToggle marginBottom={2} onFilterChange={handleFilterChange} text="" />
+      <Stack spacing={2} sx={{ justifyContent: "center", alignItems: "center"}} >
+        <TextField label={"Search"} onChange={handleSearchChange} sx={{ width: '80%' }} ></TextField>
+        <Stack spacing={0} sx={{ justifyContent: "center", alignItems: "center"}}>
+          <Typography sx={{ 
+                  color: '#666',
+                  fontSize: '1.1rem',
+                  fontWeight: 500,
+                  opacity: 0.8,
+                  textAlign: 'center'
+              }}>Filter by: </Typography>
+          <TagToggle marginBottom={2} onFilterChange={handleFilterChange} text="" />
+        </Stack>
+      </Stack>
 
       <Stack spacing={1} marginBottom={"0%"} sx={{ justifyContent: "center", alignItems: "center"}}>
         {filteredData.map((recipe, index) => {
@@ -123,6 +134,7 @@ export default function Recipes() {
             />
           );
         })}
+        <br /><br /><br /><br />
       </Stack>
 
       <Footer 
