@@ -109,7 +109,7 @@ export default function ImageUpload({ router, setLoading, filterStates }) {
                         mt: 2,
                         fontSize: '1.1rem',
                         fontWeight: 500,
-                        letterSpacing: '0.5px',
+                        letterSpacing: '0px',
                         opacity: 0.8,
                         textAlign: 'center'
                     }}

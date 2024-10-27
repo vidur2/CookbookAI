@@ -12,9 +12,9 @@ const theme = createTheme({
         fontFamily: '"Verdana", Helvetica, Arial, sans-serif'
     }
     });
-  const firstName = "John"; // Replace with actual first name
-  const lastName = "Doe";   // Replace with actual last name
-  const aboutMe = "I am a beginning foodie who loves to cook! I always end up having too much food in my fridge LOL"; // Simple about me text
+  const firstName = "Max";
+  const lastName = "Wang";
+  const aboutMe = "I am a beginning foodie who loves to cook! I always end up having too much food in my fridge LOL";
   const [bottomNavValue, setBottomNavValue] = useState(2);
   const router = useRouter();
 
@@ -38,7 +38,7 @@ const theme = createTheme({
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
         <Avatar 
         alt={`${firstName} ${lastName}`} 
-        src="https://via.placeholder.com/150"
+        src="https://cdn.discordapp.com/attachments/578775229271113730/1299993040349564928/DSCF3820-.jpg?ex=671f385d&is=671de6dd&hm=a78b9e71a92db41e525f5167f39ff222365b47712665f59e95790799458ea6c1&"
         sx={{ width: 100, height: 100 }}
         />
         <Typography variant="h5" fontWeight="bold">{firstName} {lastName}</Typography>
