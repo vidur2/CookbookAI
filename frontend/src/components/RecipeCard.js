@@ -3,9 +3,10 @@ import { Card, Typography, Chip, Rating, Switch, Stack, IconButton } from '@mui/
 import FavoriteButton from './FavoriteButton';
 import Tag from './Tag';
 
-export default function RecipeCard({text, rating, favorite, tags}) {
-
+export default function RecipeCard({text, rating, favorite, tags, uuid, description = ""}) {
+  
   return (
+    // need to add onclick -> recipeinfo
     <Card
       sx = {{width: '80%', margin: 'auto', borderRadius: 5}}  
     >
@@ -36,8 +37,8 @@ export default function RecipeCard({text, rating, favorite, tags}) {
           </Stack>
         </Stack>
         <Stack direction="row" alignItems="center" spacing={0} p={0}>
-          <FavoriteButton favorite={favorite}/>
-
+          <FavoriteButton favorite={favorite} uuid={uuid}/>
+          {/* <Typography>{favorite}</Typography> */}
           {/* <Typography>{active ? "❤️" : "🩶"}</Typography>
           <Switch checked={active} onChange={handleToggleActive} /> */}
         </Stack>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Chip } from '@mui/material';
+import { Box, Chip, Typography } from '@mui/material';
 
 export default function TagToggle({ onFilterChange }) {
   const [activeChips, setActiveChips] = useState({
@@ -34,7 +34,7 @@ export default function TagToggle({ onFilterChange }) {
   const chips = [
     { type: 'vegan', label: 'Vegan' },
     { type: 'vegetarian', label: 'Vegetarian' },
-    { type: 'favorites', label: 'Favorites' }
+    { type: 'favorites', label: 'Base off favorites' }
   ];
   const handleChipClick = (chipType) => {
     const newActiveChips = {
@@ -46,23 +46,40 @@ export default function TagToggle({ onFilterChange }) {
     onFilterChange(newActiveChips);
   };
 
+
   return (
-    <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', mt: 2 }}>
-      {chips.map(chip => {
-        const colors = getChipColors(chip.type, activeChips[chip.type]);
-        return (
-          <Chip
-            key={chip.type}
-            label={chip.label}
-            onClick={() => handleChipClick(chip.type)}
-            sx={{
-              backgroundColor: colors.backgroundColor,
-              color: colors.color,
-              '&:hover': { backgroundColor: colors.hoverColor }
+    <Box>  {}
+        <Typography 
+            sx={{ 
+                color: '#666',
+                fontSize: '1.1rem',
+                fontWeight: 500,
+                letterSpacing: '0.5px',
+                opacity: 0.8,
+                textAlign: 'center'
             }}
-          />
-        );
-      })}
+        >
+            Select your tags
+        </Typography>
+    
+        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', mt: 1 }}>
+            {chips.map(chip => {
+                const colors = getChipColors(chip.type, activeChips[chip.type]);
+                return (
+                    <Chip
+                        key={chip.type}
+                        label={chip.label}
+                        onClick={() => handleChipClick(chip.type)}
+                        sx={{
+                            backgroundColor: colors.backgroundColor,
+                            color: colors.color,
+                            border: `2px solid ${activeChips[chip.type] ? colors.backgroundColor : colors.hoverColor}`,
+                            '&:hover': { backgroundColor: colors.hoverColor }
+                        }}
+                    />
+                );
+            })}
+        </Box>
     </Box>
-  );
+);
 }

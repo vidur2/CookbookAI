@@ -1,18 +1,24 @@
 import React, { useRef } from 'react';
-import { Box, IconButton } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import { Upload } from '@mui/icons-material';
 
-async function createRecipe(img, username) {
+async function createRecipe(img, username, filterStates) {
     'use server'
+    const filters = [];
+    for (const filter in filterStates) {
+        if (filterStates[filter]) {
+            filters.push(filter);
+        }
+    }
+
     const api_url = `${process.env.NEXT_PUBLIC_BACKEND_URI}/recipes/create`;
     const res = await fetch(api_url, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ img: img, username: username })
+        body: JSON.stringify({ img: img, username: username, filters: filters })
     })
-    console.log(res.status);
 
     const url = new URL("http://localhost:5000/RecipeInfo");
     const obj = await res.json();
@@ -20,7 +26,11 @@ async function createRecipe(img, username) {
         if (key != "embedding") {
             if (typeof obj['data'][key] === 'object') {
                 url.searchParams.set(key, JSON.stringify(obj['data'][key]));
-            } else {
+            } else if (key === 'recipe') {
+                url.searchParams.set(key, encodeURIComponent(JSON.stringify(obj['data'][key])));
+            }
+            
+            else {
                 url.searchParams.set(key, obj['data'][key])
             }
         }
@@ -30,7 +40,7 @@ async function createRecipe(img, username) {
 }
 
 
-export default function ImageUpload({ router, setLoading }) {
+export default function ImageUpload({ router, setLoading, filterStates }) {
     console.log(router)
     const fileInputRef = useRef(null);
     const handleIconClick = () => {
@@ -46,7 +56,11 @@ export default function ImageUpload({ router, setLoading }) {
             reader.onload = (e) => {
                 const b64String = e.target.result.split(";base64,")[1]  
                 window.sessionStorage.setItem("img", b64String)
-                createRecipe(b64String, "vmod2005@gmail.com").then((url) => {
+                const username = window.sessionStorage.getItem("username");
+                if (username === null) {
+                    router.push("/login");
+                }
+                createRecipe(b64String, username, filterStates).then((url) => {
                     router.push("/" + url);
                 });
             };
@@ -58,7 +72,8 @@ export default function ImageUpload({ router, setLoading }) {
             minHeight: '45vh',
             display: 'flex',
             alignItems: 'center',
-            p: 5
+            p: 5,
+            paddingBottom: 3,
         }}>
             <input
                 type="file"
@@ -75,6 +90,7 @@ export default function ImageUpload({ router, setLoading }) {
                     border: '3px dashed #ccc',
                     borderRadius: 3,
                     display: 'flex',
+                    flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
                     cursor: 'pointer',
@@ -85,7 +101,21 @@ export default function ImageUpload({ router, setLoading }) {
                     },
                 }}
             >
+                
                 <Upload sx={{ fontSize: 120, color: '#666' }} />
+                <Typography 
+                    sx={{ 
+                        color: '#666',
+                        mt: 2,
+                        fontSize: '1.1rem',
+                        fontWeight: 500,
+                        letterSpacing: '0.5px',
+                        opacity: 0.8,
+                        textAlign: 'center'
+                    }}
+                >
+                Snap a pic of your fridge, get delicious recipes!
+            </Typography>
             </Box>
         </Box>
     );

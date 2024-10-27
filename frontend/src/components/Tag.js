@@ -14,6 +14,18 @@ export default function Tag({tag, small = false}) {
     case "Vegetarian":
       bgcolor="#A7E34B"
       break;
+    default:
+      const firstChar = tag.charCodeAt(0)
+      if (firstChar < 70) {
+        bgcolor = "#FFD700"
+      } else if (firstChar < 75) {
+        bgcolor = "#FFC0CB"
+      } else if (firstChar < 80) {
+        bgcolor = "#FF7F50"
+      } else if (firstChar < 85) {
+        bgcolor = "#ADD8E6"
+      }
+      break;
   }
 
   return (

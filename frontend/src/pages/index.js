@@ -8,6 +8,7 @@ import TagToggle from '@/components/TagToggle';
 import { useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress'; 
 import { useRouter } from 'next/router';
+import FavoriteButton from '@/components/FavoriteButton';
 
 export default function RecipeApp() {
   const [bottomNavValue, setBottomNavValue] = useState(0);
@@ -15,7 +16,7 @@ export default function RecipeApp() {
   const [filterStates, setFilterStates] = useState({
     vegan: false,
     vegeterian: false,
-    favorites: true
+    favorites: false
   });
   const router = useRouter();
 
@@ -25,8 +26,14 @@ export default function RecipeApp() {
 
   const handleFilterChange = (filterStates) => {
     // { vegan: true, vegetarian: false, favorites: true }
-
+    setFilterStates(filterStates);
   };
+  useEffect(() => {
+    const username = window.sessionStorage.getItem("username");
+    if (username === null) {
+        router.push("/login");
+    }
+  }, [])
 
   if (loading) {
     return (
@@ -37,19 +44,20 @@ export default function RecipeApp() {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50' }}>
+    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
       <Header />
       
       {/* <Box sx={{ p: 2 }}>
         <RecipeCard text="HX " rating={2} favorite={false} />
       </Box> */}
-      <ImageUpload setLoading={setLoading} router={router}/>
+      <ImageUpload setLoading={setLoading} router={router} filterStates={filterStates}/>
       <TagToggle onFilterChange={handleFilterChange} />
       <Footer 
         value={bottomNavValue}
         onChange={handleNavChange}
         router={router}
       />
+
     </Box>
   );
 }

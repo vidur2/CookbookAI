@@ -5,6 +5,7 @@ import { AccountBox, Add, ImageSearch, MenuBook, Photo } from '@mui/icons-materi
 export default function BottomNav({ value, onChange, router }) {
   const scanAction = () =>  router.push("/");
   const recipeAction = () =>  router.push("/Recipes");
+  const profileAction = () =>  router.push("/Profile");
 
 
   return (
@@ -26,7 +27,7 @@ export default function BottomNav({ value, onChange, router }) {
       >
         <BottomNavigationAction label="Scan" icon={<ImageSearch />} onClick={scanAction}/>
         <BottomNavigationAction label="Recipes" icon={<MenuBook />} onClick={recipeAction}/>
-        <BottomNavigationAction label="Profile" icon={<AccountBox />} />
+        <BottomNavigationAction label="Profile" icon={<AccountBox />} onClick={profileAction}/>
       </BottomNavigation>
       
       {/* <Fab
