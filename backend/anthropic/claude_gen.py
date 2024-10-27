@@ -58,7 +58,7 @@ def gen_based_on_other_recipe(recipe_info, filters):
                 "content": [
                     {
                         "type": "text",
-                        "text": f"Make a {food_adjectives[random.randint(0, 99)]} based on {recipe_info} that is {' '.join(filters)}. Don't worry about using all the ingredients. Just say the recipe, no preamble. Return as json with fields of ingredients (array), steps (array)"
+                        "text": f"Make a {food_adjectives[random.randint(0, 99)]} recipe based on {recipe_info} that is {' '.join(filters)}. Don't worry about using all the ingredients. Just say the recipe, no preamble. Return as json with fields of ingredients (array), steps (array)"
                     }
                 ]
             }
