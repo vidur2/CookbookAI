@@ -3,7 +3,7 @@ import { Box, Button, Container, TextField, Typography } from '@mui/material';
 
 async function createUser(username) {
     'use server'
-    const api_url = `${process.env.NEXT_PUBLIC_BACKEND_URI}/user/create`;
+    const api_url = `https://cookbookai-710066540667.us-central1.run.app/user/create`;
     console.log({ username: username })
     const res = await fetch(api_url, {
         method: "POST",
@@ -19,7 +19,7 @@ async function createUser(username) {
 
 export default function Login() {
     const router = useRouter();
-    console.log(`${process.env.NEXT_PUBLIC_BACKEND_URI}/user/create`);
+    console.log(`https://cookbookai-710066540667.us-central1.run.appuser/create`);
     const handleLogin = (e) => {
         e.preventDefault();
         const username = document.getElementById("username").value;

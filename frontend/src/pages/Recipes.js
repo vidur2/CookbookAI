@@ -12,7 +12,7 @@ import TagToggle from '@/components/TagToggle';
 
 async function getRecipesByUser(username) {
   'use server'
-  const api_url = `${process.env.NEXT_PUBLIC_BACKEND_URI}/recipes/get_by_user`;
+  const api_url = `https://cookbookai-710066540667.us-central1.run.app/recipes/get_by_user`;
 
   const res = await fetch(api_url, {
       method: "POST",

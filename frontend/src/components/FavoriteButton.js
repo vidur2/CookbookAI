@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 function postFavorite(favorite, uuid) {
     'use server'
 
-    const api_url = `${process.env.NEXT_PUBLIC_BACKEND_URI}/recipes/update_fav`;
+    const api_url = `https://cookbookai-710066540667.us-central1.run.app/recipes/update_fav`;
     console.log({ favorite, uuid })
     fetch(api_url, {
         method: "POST",

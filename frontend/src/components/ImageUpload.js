@@ -11,7 +11,7 @@ async function createRecipe(img, username, filterStates) {
         }
     }
 
-    const api_url = `${process.env.NEXT_PUBLIC_BACKEND_URI}/recipes/create`;
+    const api_url = `https://cookbookai-710066540667.us-central1.run.app/recipes/create`;
     const res = await fetch(api_url, {
         method: "POST",
         headers: {
