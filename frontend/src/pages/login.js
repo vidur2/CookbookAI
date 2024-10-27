@@ -19,6 +19,7 @@ async function createUser(username) {
 
 export default function Login() {
     const router = useRouter();
+    console.log(`${process.env.NEXT_PUBLIC_BACKEND_URI}/user/create`);
     const handleLogin = (e) => {
         e.preventDefault();
         const username = document.getElementById("username").value;
