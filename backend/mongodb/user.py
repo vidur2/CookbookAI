@@ -102,7 +102,7 @@ def update_recipe(recipe_id, favorited):
     recipes = []
 
     embeddingInfo.update_one({ 'uuid': recipe_id }, {
-        '$set': {"favorited": favorited}
+        '$set': {"liked": favorited}
     })
 
     return 0
