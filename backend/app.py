@@ -15,7 +15,6 @@ def test():
     return "test"
 
 """
-recieve json body of:
 {
     "username": <string>
 }
