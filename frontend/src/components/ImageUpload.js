@@ -61,6 +61,7 @@ export default function ImageUpload({ router, setLoading, filterStates }) {
                     router.push("/login");
                 }
                 createRecipe(b64String, username, filterStates).then((url) => {
+                    console.log(url);
                     router.push("/" + url);
                 });
             };
