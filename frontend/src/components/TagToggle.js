@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Box, Chip, Typography } from '@mui/material';
 
-export default function TagToggle({ onFilterChange }) {
+export default function TagToggle({ onFilterChange, text = "Select your tags" }) {
   const [activeChips, setActiveChips] = useState({
     vegan: false,
     vegetarian: false,
     favorites: false
   });
+  
 
   const getChipColors = (type, isActive) => {
     switch (type) {
@@ -24,9 +25,9 @@ export default function TagToggle({ onFilterChange }) {
         };
       case 'favorites':
         return {
-          backgroundColor: isActive ? '#FFB347' : '#fff',
-          color: '#2C2C2C',
-          hoverColor: isActive ? '#FFA533' : '#FFE1C0'
+          backgroundColor: isActive ? '#c23f38' : '#fff',
+          color: isActive ? 'white' : '#2C2C2C',
+          hoverColor: isActive ? '#d03425' : '#e19f9c'
         };
     }
   };
@@ -34,7 +35,7 @@ export default function TagToggle({ onFilterChange }) {
   const chips = [
     { type: 'vegan', label: 'Vegan' },
     { type: 'vegetarian', label: 'Vegetarian' },
-    { type: 'favorites', label: 'Base off favorites' }
+    { type: 'favorites', label: (text == "") ? 'Favorites' : 'Base off favorites' }
   ];
   const handleChipClick = (chipType) => {
     const newActiveChips = {
@@ -59,7 +60,7 @@ export default function TagToggle({ onFilterChange }) {
                 textAlign: 'center'
             }}
         >
-            Select your tags
+            {text}
         </Typography>
     
         <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', mt: 1 }}>

@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import { IconButton } from '@mui/material';
+import { FavoriteBorder, Favorite } from '@mui/icons-material';
+import { useEffect } from 'react';
 
 function postFavorite(favorite, uuid) {
     'use server'
@@ -16,8 +18,8 @@ function postFavorite(favorite, uuid) {
 }
 
 // RecipeCard.js, RecipeInfo.js
-export default function FavoriteButton({favorite, uuid}) {
-    const [active, setActive] = useState(favorite);
+export default function FavoriteButton({favorite, uuid, active, setActive }) { 
+    
     const handleToggleActive = (event) => {
         setActive(!active)
         postFavorite(!active, uuid);
@@ -25,7 +27,7 @@ export default function FavoriteButton({favorite, uuid}) {
 
     return (
         <IconButton onClick={handleToggleActive} >
-        {active ? "❤️" : "🩶"}
+        {active ? <Favorite color="error" /> : <FavoriteBorder color="error" />}
         </IconButton>
     );
 };

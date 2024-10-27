@@ -1,7 +1,7 @@
 import { useParams } from 'next/navigation';
 import React, {useState} from 'react';
 import Footer from '@/components/Footer';
-import { IconButton, Typography, Box, Rating, Stack, Grid2 } from '@mui/material';
+import { IconButton, Typography, Box, Rating, Stack, Grid2, ThemeProvider, createTheme } from '@mui/material';
 import { ArrowBackIosNew } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import RecipeCard from '@/components/RecipeCard';
@@ -10,9 +10,8 @@ import Tag from '@/components/Tag';
 import { useEffect } from 'react';
 
 
-function processParams(query) {
-    const { cuisine, difficulty_rating, is_vegan, is_vegetarian, recipe, recipe_title, user, uuid, liked } = query;
-
+function processParams(query, setActive) {
+    const { cuisine, difficulty_rating, is_vegan, is_vegetarian, recipe, recipe_title, uuid, liked } = query;
     // const tags = [cuisine.charAt(0).toUpperCase() + cuisine.slice(1)]
     const tags = []
     if (typeof cuisine !== "undefined") {
@@ -28,10 +27,11 @@ function processParams(query) {
     }
     console.log(decodeURIComponent(recipe).replace(`\n`, ""));
 
+
     return {
         name: recipe_title,
         rating: parseInt(difficulty_rating),
-        liked: liked === "true",
+        liked: setActive(liked === "true"),
         uuid: uuid,
         recipe: recipe,
         tags: tags
@@ -40,9 +40,13 @@ function processParams(query) {
 
 
 export default function RecipeInfo() {
-
+    const [active, setActive] = useState(false)
     const router = useRouter();
-    
+    const theme = createTheme({
+        typography: {
+            fontFamily: '"Verdana", Helvetica, Arial, sans-serif'
+        }
+        });
     // 2 ways to get to the page:
     // 1 --> uploaded images gives this recipe
     // 2 --> clicking recipe card in your history
@@ -52,25 +56,26 @@ export default function RecipeInfo() {
     // const { name, rating, favorite, tags, uuid } = useParams();
     const [name, setName] = useState("test")
     const [rating, setRating] = useState(3)
-    const [favorite, setFavorite] = useState(false)
     const [tags, setTags] = useState(["vegan", "vegetarian", "cuisine type"])
     const [uuid, setUuid] = useState("8ab43986-4b13-4785-a284-53b14817d483")
-    const [recipe, setRecipe] = useState("");
+    const [recipe, setRecipe] = useState({
+        ingredients: [],
+        steps: []
+    });
     useEffect(() => { 
         const searchParams = new URLSearchParams(window.location.search);
         const paramsObject = Object.fromEntries(searchParams.entries()); // Convert to object
-        const out = processParams(paramsObject);
+        const out = processParams(paramsObject, setActive);
         setName(out.name);
         setRating(out.rating);
-        setFavorite(out.liked);
         setTags(out.tags);
         setUuid(out.uuid);
-        setRecipe(decodeURIComponent(out.recipe));
+        setRecipe(JSON.parse(decodeURIComponent(out.recipe)));
     }, [])
 
     // fromCard ?
     const fromCard = false
-    const backAction = () =>  fromCard ? router.push("/recipes") : router.push("/");
+    const backAction = () =>  router.back();
     // nav bar func
     const [bottomNavValue, setBottomNavValue] = useState();
     const handleNavChange = (event, newValue) => {
@@ -79,8 +84,7 @@ export default function RecipeInfo() {
 
     return (
         
-        
-        // {fromCard ? <Button> </Button> : }
+        <ThemeProvider theme={theme}>
         <Stack>
 
             {/* -----------TEST------------ */}
@@ -95,7 +99,7 @@ export default function RecipeInfo() {
                     justifyContent="center"
                     alignItems="center"
                 >
-                    <Typography variant="h2" align="center" marginTop={3}>{name}</Typography>
+                    <Typography variant="h4" align="center" marginTop={3}>{name}</Typography>
 
                     <Stack direction="row" marginTop={1} spacing={1} sx={{ justifyContent: "center", alignItems: "center"}}>
                         {tags.map((tag, index) => (
@@ -105,13 +109,29 @@ export default function RecipeInfo() {
                     
                     <Stack direction="row" spacing={1} sx={{ justifyContent: "center", alignItems: "center"}}>
                         <Rating value={rating} readOnly align="center" />
-                        <FavoriteButton favorite={favorite} uuid={uuid} />
+                        <FavoriteButton uuid={uuid} active={active} setActive={setActive} />
                     </Stack>
+                    <Stack marginBottom={"30%"}>
+                        <Typography variant='h6'>Ingredients:</Typography>
+                        <ul>
+                        {
+                            recipe["ingredients"].map((ingredient, key) => (
+                                <Typography key={key}><li>{ingredient}</li></Typography>
+                            ))
+                        }
+                        </ul>
 
-                        
-                    <Typography variant="span" align="center" marginTop={3} dangerouslySetInnerHTML={{ __html: recipe.replace("\n", "") }}></Typography>
-
+                        <Typography variant='h6'>Steps:</Typography>
+                        <ol>
+                        {
+                            recipe["steps"].map((step, key) => (
+                                <Typography key={key}><li>{step}</li></Typography>
+                            ))
+                        }
+                        </ol>
+                    </Stack>
                     <Footer 
+                        marginTop={"30%"}
                         value={bottomNavValue}
                         onChange={handleNavChange}
                         router={router}
@@ -121,6 +141,7 @@ export default function RecipeInfo() {
             <Grid2 size={1} marginRight={2} /> 
         </Grid2>
         </Stack>
+        </ThemeProvider>
     );
 }
 

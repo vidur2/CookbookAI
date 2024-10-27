@@ -7,6 +7,7 @@ import FavoriteButton from '@/components/FavoriteButton';
 import { useEffect } from 'react';
 import {CircularProgress} from '@mui/material';
 import Header from '@/components/Header';
+import TagToggle from '@/components/TagToggle';
 
 
 async function getRecipesByUser(username) {
@@ -51,7 +52,7 @@ export default function Recipes() {
       setBottomNavValue(newValue);
   };
 
-  const [searchParams, setSearchParams] = useState("test");
+  const [searchParams, setSearchParams] = useState("");
   const handleSearchChange = (event) => {
     console.log("new search param - " + event.target.value)
     setSearchParams(event.target.value)
@@ -64,9 +65,25 @@ export default function Recipes() {
     }
   };
 
-  const handleFilterVegan = (event) => {
-    
-  }
+
+  const [filterStates, setFilterStates] = useState({
+    vegan: false,
+    vegeterian: false,
+    favorites: false
+  });
+  const handleFilterChange = (filterStates) => {
+    setFilterStates(filterStates);
+    console.log(filterStates)
+    setFilteredData(recipeData.filter(recipe => {
+      const matchesVegan = recipe.is_vegan || !filterStates.vegan;
+      const matchesVegetarian = recipe.is_vegetarian || !filterStates.vegetarian;
+      const matchesFavorite = recipe.liked || !filterStates.favorites;
+      const matchesFilter = searchParams === "" || recipe.recipe_title.toLowerCase().includes(searchParams.toLowerCase())
+      // console.log(recipe + " - vegan: " + matchesVegan + " - veg: " + matchesVegetarian + " - fav: " + matchesFavorite +"- filt: " + matchesFilter)
+
+      return matchesVegan && matchesVegetarian && matchesFavorite && matchesFilter
+    }))
+  };
 
   if (loading) {
     return (
@@ -82,6 +99,7 @@ export default function Recipes() {
       <Header text="Saved Recipes" />
 
       <TextField label={"Search"} onChange={handleSearchChange} ></TextField>
+      <TagToggle marginBottom={2} onFilterChange={handleFilterChange} text="" />
 
       <Stack spacing={1} marginBottom={"0%"} sx={{ justifyContent: "center", alignItems: "center"}}>
         {filteredData.map((recipe, index) => {

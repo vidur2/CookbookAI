@@ -4,6 +4,8 @@ import { Chip } from '@mui/material';
 
 export default function Tag({tag, small = false}) {
 
+  tag = tag.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+
   let bgcolor = "#FFB347"
   let color = "#2C2C2C"
   switch (tag) {
