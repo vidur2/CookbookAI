@@ -34,7 +34,7 @@ def imgToRecipe(b64Url, media_type):
                         },
                         {
                             "type": "text",
-                            "text": f"Make a {food_adjectives[random.randint(0, 99)]} recipe for the ingredients that you see in this image. Just say the recipe, no preamble. Return as json with fields of ingredients (array), steps (array)"
+                            "text": f"Make a {food_adjectives[random.randint(0, 99)]} recipe for the ingredients that you see in this image. Don't worry about using all the ingredients. Just say the recipe, no preamble. Return as json with fields of ingredients (array), steps (array)"
                         }
                     ],
                 }
@@ -58,7 +58,7 @@ def gen_based_on_other_recipe(recipe_info, filters):
                 "content": [
                     {
                         "type": "text",
-                        "text": f"Make a {food_adjectives[random.randint(0, 99)]} based on {recipe_info} that is {' '.join(filters)}. Just say the recipe, no preamble. Return as json with fields of ingredients (array), steps (array)"
+                        "text": f"Make a {food_adjectives[random.randint(0, 99)]} based on {recipe_info} that is {' '.join(filters)}. Don't worry about using all the ingredients. Just say the recipe, no preamble. Return as json with fields of ingredients (array), steps (array)"
                     }
                 ]
             }
